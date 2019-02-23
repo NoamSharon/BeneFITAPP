@@ -7,7 +7,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Home stav noamanoama</Text>
+        <Text>Home stavstst</Text>
         <Button
               primary text="go to login page"
               icon="arrow-back"
