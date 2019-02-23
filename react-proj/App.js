@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import Login from './Login';
+import Login from './Pages/Login';
 import Home from './Home';
 import { ThemeProvider } from 'react-native-material-ui';
 
