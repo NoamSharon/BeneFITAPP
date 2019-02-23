@@ -9,10 +9,10 @@ export default class Home extends React.Component {
       <View style={styles.container}>
         <Text>Home stavstst</Text>
         <Button
-              primary text="go to login page"
+              primary text="go to SignIn page"
               icon="arrow-back"
               onPress={() => {
-                this.props.navigation.navigate('Login');
+                this.props.navigation.navigate('SignIn');
               }} />
       </View>
     );
