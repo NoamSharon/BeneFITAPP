@@ -19,9 +19,13 @@ export default class SignIn extends React.Component {
         Gender: '',
         DateOfBirth: '',
         Picture: '',
-        SearchRadius: '5 km',
-        IsTrainer: 'false',
+        SearchRadius: 5,
+        IsTrainer: 0,
         SportCategory: [1, 2, 3],
+        MinBudget : 100,
+        MaxBudget : 200,
+        PartnerGender : 'female',
+        TrainerGender : 'female'
       };
   }
 
@@ -41,10 +45,14 @@ export default class SignIn extends React.Component {
     User.Picture = this.state.Picture;
     User.SearchRadius = this.state.SearchRadius;
     User.IsTrainer = this.state.IsTrainer;
-    User.SportCategory = this.state.SportCategory;
-    console.warm(User);
+    User.SportCategories = this.state.SportCategory;
+    User.MinBudget = this.state.MinBudget;
+    User.MaxBudget = this.state.MaxBudget;
+    User.PartnerGender = this.state.PartnerGender;
+    User.TrainerGender = this.state.TrainerGender;
+    console.warn(User);
     
-    var URL = 'http://localhost:58400/api/User/InsertTrainee';
+    var URL = 'http://localhost:58400/api/InsertTrainee';
     fetch(URL, {
       method: 'POST',
       body: JSON.stringify(User),
