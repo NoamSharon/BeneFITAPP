@@ -9,7 +9,8 @@ export default class SignIn extends React.Component {
     super(props);
 
     // this.submit=this.submit.bind(this);
-
+this.test = this.test.bind(this);
+this.handleErrors = this.handleErrors.bind(this);
     this.state =
       {
         Email: '',
@@ -41,7 +42,7 @@ export default class SignIn extends React.Component {
     User.LastName = this.state.LastName;
     User.Password = this.state.Password;
     User.Gender = this.state.Gender;
-    User.DateOfBirth = this.state.DateOfBirth;
+    User.DateOfBirth = this.state.DateOfBirth.toString();
     User.Picture = this.state.Picture;
     User.SearchRadius = this.state.SearchRadius;
     User.IsTrainer = this.state.IsTrainer;
@@ -52,17 +53,37 @@ export default class SignIn extends React.Component {
     User.TrainerGender = this.state.TrainerGender;
     console.warn(User);
     
-    var URL = 'http://localhost:58400/api/InsertTrainee';
-    fetch(URL, {
-      method: 'POST',
-      body: JSON.stringify(User),
-      headers:({
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      })
-    }).then(res => res.json())
-      .catch(error => console.error('Error:', error))
-      .then(response => console.log('Success:', response));
+    // var URL = 'http://localhost:58400/api/InsertTrainee';
+    // fetch(URL, {
+    //   method: 'POST',
+    //   body: JSON.stringify(User),
+    //   headers:({
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   })
+    // }).then(res => res.json())
+    //   .catch(error => console.error('Error:', error))
+    //   .then(response => console.log('Success:', response));
+
+    let url = 'http://localhost:58400/api/test';
+    fetch(url)
+    .then(this.handleErrors)      
+    .then(response => response.json())
+    .then(data => this.test(data))
+    .catch(error => console.log("There was an error in getting the persons" ));
+  }
+
+  handleErrors = (response) => {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    
+    }
+            return response;
+}
+
+  test (data)
+  {
+    console.log(data);
   }
 
   render() {
