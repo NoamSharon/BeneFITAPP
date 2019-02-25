@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, ScrollView, TextInput } from 'react-native';
-import DateTimePickerTest from './DateTimePickerTest';
+import DateTimePickerTest from '../Components/DateTimePickerTest';
 import { Button, ActionButton } from 'react-native-material-ui';
-import DateTimePicker from 'react-native-modal-datetime-picker';
+
 
 export default class SignIn extends React.Component {
   constructor(props) {
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     // alignItems: 'center',
     // justifyContent: 'center',
-    backgroundColor: 'gray',
+    backgroundColor: 'white',
   },
 
   inputText: {
