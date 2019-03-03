@@ -22,4 +22,6 @@
     "babel-preset-expo": "^5.0.0"
   },
   "private": true
+ 
+
 }
