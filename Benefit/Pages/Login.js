@@ -22,7 +22,8 @@ export default class Login extends React.Component {
       Email: this.state.Email,
       Password: this.state.Password
     }
-    fetch('http://proj.ruppin.ac.il/bgroup79/test1/tar6/api/CheckIfPasswordMatches', {
+     fetch('http://proj.ruppin.ac.il/bgroup79/test1/tar6/api/CheckIfPasswordMatches', {
+
       method: 'POST',
       headers: { "Content-type": "application/json; charset=UTF-8" },
       body: JSON.stringify(LoginDetails),
@@ -42,6 +43,7 @@ export default class Login extends React.Component {
 
 
   Login() {
+    
     fetch('http://proj.ruppin.ac.il/bgroup79/test1/tar6/api/CheckIfEmailExists?Email=' + this.state.Email, {
       method: 'POST',
       headers: { "Content-type": "application/json; charset=UTF-8" },
