@@ -7,6 +7,9 @@ import styles from './pageStyle';
 import { Container, Header, Content, ListItem, CheckBox, Text, Body } from 'native-base';
 
 const { Marker } = MapView;
+var Code = 0;
+var couple_results = [];
+var group_results = [];
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -15,6 +18,7 @@ export default class Home extends React.Component {
     this.state =
       {
         Toggle: '',
+        UserCode: 0,
         StartTime: '2019-03-16 08:00:00.123',
         EndTime: '2019-03-16 12:00:00.123',
         Latitude: '32.360869',
@@ -26,16 +30,15 @@ export default class Home extends React.Component {
       };
   }
 
-  boolToInt(b)
-  {
-    if (b==true)
-    return 1;
+  boolToInt(b) {
+    if (b == true)
+      return 1;
     else return 0;
   }
 
-  search(){
+  search() {
     const OnlineDetails = {
-      UserCode: this.state.UserCode,
+      UserCode: Code,
       Latitude: this.state.Latitude,
       Longitude: this.state.Longitude,
       StartTime: this.state.StartTime,
@@ -43,7 +46,7 @@ export default class Home extends React.Component {
       WithTrainer: this.boolToInt(this.state.WithTrainer),
       WithPartner: this.boolToInt(this.state.WithPartner),
       GroupWithTrainer: this.boolToInt(this.state.GroupWithTrainer),
-      GroupWithPartners: this.boolToInt(this.state.GroupWithPartner),
+      GroupWithPartners: this.boolToInt(this.state.GroupWithPartners),
     }
     console.warn(OnlineDetails);
 
@@ -54,60 +57,80 @@ export default class Home extends React.Component {
       body: JSON.stringify(OnlineDetails),
     })
       .then(res => res.json())
-      .then(response => {console.warn(response)
+      .then(response => {
+        couple_results = response;
+        console.warn(couple_results);
       })
 
       .catch(error => console.warn('Error:', error.message));
+
+      if(this.state.GroupWithTrainer || this.state.GroupWithPartners) {
+        fetch('http://proj.ruppin.ac.il/bgroup79/test1/tar6/api/SearchGroups', {
+
+          method: 'POST',
+          headers: { "Content-type": "application/json; charset=UTF-8" },
+          body: JSON.stringify(OnlineDetails),
+        })
+          .then(res => res.json())
+          .then(response => {
+            group_results = response;
+            console.warn(group_results);
+          })
+    
+          .catch(error => console.warn('Error:', error.message));
+      }
   }
 
   render() {
-    const UserCode = this.props.navigation.getParam('UserCode', 0);
-    console.warn(UserCode);
+    Code = this.props.navigation.getParam('UserCode', 0);
+    () => this.setState({ UserCode: Code });
+    console.warn(Code);
+    console.warn(this.state.UserCode);
     return (
-        
-          <Container>
-            <Content>
-              <ListItem>
-                <CheckBox checked={this.state.WithTrainer} 
-                onPress={()=>this.setState({WithTrainer: !this.state.WithTrainer})}/>
-                <Body>
-                  <Text>With Trainer</Text>
-                </Body>
-              </ListItem>
-              <ListItem>
-                <CheckBox checked={this.state.WithPartner}
-                onPress={()=>this.setState({WithPartner: !this.state.WithPartner})}
-                />
-                <Body>
-                <Text>With Partner</Text>
-                </Body>
-              </ListItem>
-              <ListItem>
-                <CheckBox checked={this.state.GroupWithTrainer} color="green"
-                onPress={()=>this.setState({GroupWithTrainer: !this.state.GroupWithTrainer})}
-                />
-                <Body>
-                <Text>Group With Trainer</Text>
-                </Body>
-              </ListItem>
-              <ListItem>
-                <CheckBox checked={this.state.GroupWithPartners} color="green"
-                onPress={()=>this.setState({GroupWithPartners: !this.state.GroupWithPartners})}
-                />
-                <Body>
-                <Text>Group With Partner</Text>
-                </Body>
-              </ListItem>
-            </Content>
 
-          <Button
-            primary text="Search"
-            onPress={() => this.search()}
-          />
+      <Container>
+        <Content>
+          <ListItem>
+            <CheckBox checked={this.state.WithTrainer}
+              onPress={() => this.setState({ WithTrainer: !this.state.WithTrainer })} />
+            <Body>
+              <Text>With Trainer</Text>
+            </Body>
+          </ListItem>
+          <ListItem>
+            <CheckBox checked={this.state.WithPartner}
+              onPress={() => this.setState({ WithPartner: !this.state.WithPartner })}
+            />
+            <Body>
+              <Text>With Partner</Text>
+            </Body>
+          </ListItem>
+          <ListItem>
+            <CheckBox checked={this.state.GroupWithTrainer} color="green"
+              onPress={() => this.setState({ GroupWithTrainer: !this.state.GroupWithTrainer })}
+            />
+            <Body>
+              <Text>Group With Trainer</Text>
+            </Body>
+          </ListItem>
+          <ListItem>
+            <CheckBox checked={this.state.GroupWithPartners} color="green"
+              onPress={() => this.setState({ GroupWithPartners: !this.state.GroupWithPartners })}
+            />
+            <Body>
+              <Text>Group With Partner</Text>
+            </Body>
+          </ListItem>
+        </Content>
 
-          <LocationPage></LocationPage>
+        <Button
+          primary text="Search"
+          onPress={() => this.search()}
+        />
 
-          {/* <View style={{ flexDirection: 'column'}}>
+        <LocationPage couple_results={couple_results} group_results={group_results}></LocationPage>
+
+        {/* <View style={{ flexDirection: 'column'}}>
   <CheckBox />
   <View style={{ flexDirection: 'row' }}>
     <CheckBox
@@ -117,8 +140,8 @@ export default class Home extends React.Component {
     <Text style={{marginTop: 5}}> With Trainer</Text>
   </View>
 </View> */}
-</Container>
-        
+      </Container>
+
 
     );
   }

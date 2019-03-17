@@ -38,7 +38,9 @@ export default class LocationPage extends React.Component {
     );
   };
 
-  render() {   
+
+
+  render() {
     return (
       <View style={styles.container}>
         <View style={styles.Header}>
@@ -69,8 +71,24 @@ export default class LocationPage extends React.Component {
                 }}
                 title='my place:)'
                 description='here i am'
-                //image={require('../assets/icon.png')}
+              //image={require('../assets/icon.png')}
               />
+
+              
+          {/* ---------try to put results markers---------------- */}
+              {console.log("hi stav" +this.props.couple_results)}
+          {this.props.couple_results.map(result=>(
+             <Marker
+             coordinate={{
+               latitude: '32.197450',
+               longitude:  '34.825434'
+             }}
+             title={result.FirstName}
+             description={result.Age}
+           //image={require('../assets/icon.png')}
+           />
+          ))}  
+
             </MapView>
           </View>
           <View
