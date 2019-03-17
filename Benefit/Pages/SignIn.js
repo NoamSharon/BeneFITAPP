@@ -51,7 +51,6 @@ this.handleErrors = this.handleErrors.bind(this);
     User.MaxBudget = this.state.MaxBudget;
     User.PartnerGender = this.state.PartnerGender;
     User.TrainerGender = this.state.TrainerGender;
-    console.warn(User);
     this.props.navigation.navigate('Home');
     
     // var URL = 'http://localhost:58400/api/InsertTrainee';

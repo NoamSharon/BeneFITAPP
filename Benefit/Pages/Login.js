@@ -32,7 +32,7 @@ export default class Login extends React.Component {
       .then(response => {
         if (response.UserCode != 0) {
           this.setState({ UserCode: response.UserCode, IsTrainer: response.IsTrainer });
-          alert('Success!');
+          this.props.navigation.navigate('Home', {UserCode: this.state.UserCode});
         }
         else
           alert("Incorrect password");
