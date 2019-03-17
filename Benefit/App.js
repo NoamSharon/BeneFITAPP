@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Login from './Pages/Login';
 import SignIn from './Pages/SignIn';
-import Home from './Home';
+import Home from './Pages/Home';
 import { ThemeProvider } from 'react-native-material-ui';
 
 class App extends React.Component {
@@ -20,9 +20,9 @@ class App extends React.Component {
     {
       Login: Login,
       SignIn: SignIn,
-    
       Home: Home,
     },
+    
     {
       initialRouteName: 'Login',
     }
