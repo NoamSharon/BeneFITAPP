@@ -100,13 +100,19 @@ export default class Home extends React.Component {
             fetchDetails={true}
             renderDescription={row => row.description || row.formatted_address || row.name}
             onPress={(data, details = null) => {
+              //console.warn(data, details);
+              console.warn(details.geometry.location.lat);
+              console.warn(details.geometry.location.lng);
+              this.setState({ Latitude: details.geometry.location.lat });
+              this.setState({ Longitude: details.geometry.location.lng });
+
             }}
             getDefaultValue={() => {
               return ''; // text input default value
             }}
             query={{
 
-              key: 'AIzaSyAKZW8kDSPbc-2w0hopNeWcxUHZetgzA4w&v=3',
+              key: 'AIzaSyB_OIuPsnUNvJ-CN0z2dir7cVbqJ7Xj3_Q',
               language: 'en', // language of the results
               types: '(cities)', // default: 'geocode'
             }}
@@ -174,7 +180,7 @@ export default class Home extends React.Component {
             onPress={() => this.search()}
           />
 
-          <LocationPage couple_results={couple_results} group_results={group_results}></LocationPage>
+          <LocationPage couple_results={couple_results} group_results={group_results} Longitude={this.state.Longitude} Latitude={this.state.Latitude}></LocationPage>
 
           {/* <View style={{ flexDirection: 'column'}}>
   <CheckBox />

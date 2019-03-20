@@ -39,7 +39,6 @@ export default class LocationPage extends React.Component {
   };
 
 
-
   render() {
     return (
       <View style={styles.container}>
@@ -57,6 +56,7 @@ export default class LocationPage extends React.Component {
                 flex: 1,
                 width: Dimensions.get('window').width - 30,
               }}
+
               region={{
                 latitude: this.state.latitude,
                 longitude: this.state.longitude,
