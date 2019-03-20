@@ -5,6 +5,8 @@ import { MapView } from 'expo';
 import LocationPage from './LocationPage';
 import styles from './pageStyle';
 import { Container, Header, Content, ListItem, CheckBox, Text, Body } from 'native-base';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+
 
 const { Marker } = MapView;
 var Code = 0;
@@ -64,21 +66,21 @@ export default class Home extends React.Component {
 
       .catch(error => console.warn('Error:', error.message));
 
-      if(this.state.GroupWithTrainer || this.state.GroupWithPartners) {
-        fetch('http://proj.ruppin.ac.il/bgroup79/test1/tar6/api/SearchGroups', {
+    if (this.state.GroupWithTrainer || this.state.GroupWithPartners) {
+      fetch('http://proj.ruppin.ac.il/bgroup79/test1/tar6/api/SearchGroups', {
 
-          method: 'POST',
-          headers: { "Content-type": "application/json; charset=UTF-8" },
-          body: JSON.stringify(OnlineDetails),
+        method: 'POST',
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+        body: JSON.stringify(OnlineDetails),
+      })
+        .then(res => res.json())
+        .then(response => {
+          group_results = response;
+          console.warn(group_results);
         })
-          .then(res => res.json())
-          .then(response => {
-            group_results = response;
-            console.warn(group_results);
-          })
-    
-          .catch(error => console.warn('Error:', error.message));
-      }
+
+        .catch(error => console.warn('Error:', error.message));
+    }
   }
 
   render() {
@@ -87,50 +89,94 @@ export default class Home extends React.Component {
     console.warn(Code);
     console.warn(this.state.UserCode);
     return (
+      <ScrollView>
+        <Container>
+          <GooglePlacesAutocomplete
+            placeholder="Search"
+            minLength={2} // minimum length of text to search
+            autoFocus={false}
+            returnKeyType={'search'}
+            listViewDisplayed="false"
+            fetchDetails={true}
+            renderDescription={row => row.description || row.formatted_address || row.name}
+            onPress={(data, details = null) => {
+            }}
+            getDefaultValue={() => {
+              return ''; // text input default value
+            }}
+            query={{
 
-      <Container>
-        <Content>
-          <ListItem>
-            <CheckBox checked={this.state.WithTrainer}
-              onPress={() => this.setState({ WithTrainer: !this.state.WithTrainer })} />
-            <Body>
-              <Text>With Trainer</Text>
-            </Body>
-          </ListItem>
-          <ListItem>
-            <CheckBox checked={this.state.WithPartner}
-              onPress={() => this.setState({ WithPartner: !this.state.WithPartner })}
-            />
-            <Body>
-              <Text>With Partner</Text>
-            </Body>
-          </ListItem>
-          <ListItem>
-            <CheckBox checked={this.state.GroupWithTrainer} color="green"
-              onPress={() => this.setState({ GroupWithTrainer: !this.state.GroupWithTrainer })}
-            />
-            <Body>
-              <Text>Group With Trainer</Text>
-            </Body>
-          </ListItem>
-          <ListItem>
-            <CheckBox checked={this.state.GroupWithPartners} color="green"
-              onPress={() => this.setState({ GroupWithPartners: !this.state.GroupWithPartners })}
-            />
-            <Body>
-              <Text>Group With Partner</Text>
-            </Body>
-          </ListItem>
-        </Content>
+              key: 'AIzaSyAKZW8kDSPbc-2w0hopNeWcxUHZetgzA4w&v=3',
+              language: 'en', // language of the results
+              types: '(cities)', // default: 'geocode'
+            }}
+            styles={{
+              description: {
+                fontWeight: 'bold',
+              },
+              predefinedPlacesDescription: {
+                color: '#1faadb',
+              },
+            }}
+            enablePoweredByContainer={true}
 
-        <Button
-          primary text="Search"
-          onPress={() => this.search()}
-        />
+            nearbyPlacesAPI="GoogleReverseGeocoding"
 
-        <LocationPage couple_results={couple_results} group_results={group_results}></LocationPage>
+            GooglePlacesSearchQuery={{
 
-        {/* <View style={{ flexDirection: 'column'}}>
+              rankby: 'distance',
+              types: 'food',
+            }}
+            filterReverseGeocodingByTypes={[
+              'locality',
+              'administrative_area_level_3',
+            ]}
+
+            debounce={200}
+          />
+
+          <Content>
+            <ListItem>
+              <CheckBox checked={this.state.WithTrainer}
+                onPress={() => this.setState({ WithTrainer: !this.state.WithTrainer })} />
+              <Body>
+                <Text>With Trainer</Text>
+              </Body>
+            </ListItem>
+            <ListItem>
+              <CheckBox checked={this.state.WithPartner}
+                onPress={() => this.setState({ WithPartner: !this.state.WithPartner })}
+              />
+              <Body>
+                <Text>With Partner</Text>
+              </Body>
+            </ListItem>
+            <ListItem>
+              <CheckBox checked={this.state.GroupWithTrainer} color="green"
+                onPress={() => this.setState({ GroupWithTrainer: !this.state.GroupWithTrainer })}
+              />
+              <Body>
+                <Text>Group With Trainer</Text>
+              </Body>
+            </ListItem>
+            <ListItem>
+              <CheckBox checked={this.state.GroupWithPartners} color="green"
+                onPress={() => this.setState({ GroupWithPartners: !this.state.GroupWithPartners })}
+              />
+              <Body>
+                <Text>Group With Partner</Text>
+              </Body>
+            </ListItem>
+          </Content>
+
+          <Button
+            primary text="Search"
+            onPress={() => this.search()}
+          />
+
+          <LocationPage couple_results={couple_results} group_results={group_results}></LocationPage>
+
+          {/* <View style={{ flexDirection: 'column'}}>
   <CheckBox />
   <View style={{ flexDirection: 'row' }}>
     <CheckBox
@@ -140,7 +186,8 @@ export default class Home extends React.Component {
     <Text style={{marginTop: 5}}> With Trainer</Text>
   </View>
 </View> */}
-      </Container>
+        </Container>
+      </ScrollView>
 
 
     );

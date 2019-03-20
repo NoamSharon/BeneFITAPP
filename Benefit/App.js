@@ -20,11 +20,12 @@ class App extends React.Component {
     {
       Login: Login,
       SignIn: SignIn,
-      Home: Home,
+      Home:Home,
+      
     },
     
     {
-      initialRouteName: 'Login',
+      initialRouteName: 'Home',
     }
   );
 
