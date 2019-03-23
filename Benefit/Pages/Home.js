@@ -47,7 +47,8 @@ export default class Home extends React.Component {
 
   search() {
     const OnlineDetails = {
-      UserCode: Code,
+      //UserCode: Code,
+      UserCode:1,
       Latitude: this.state.Latitude,
       Longitude: this.state.Longitude,
       StartTime: this.state.StartTime,
@@ -122,7 +123,6 @@ export default class Home extends React.Component {
               renderDescription={row => row.description || row.formatted_address || row.name}
               onPress={(data, details = null) => {
                 this.setState({Latitude:details.geometry.location.lat , Longitude:details.geometry.location.lng });
-
               }}
               getDefaultValue={() => {
                 return ''; // text input default value
@@ -131,9 +131,9 @@ export default class Home extends React.Component {
 
                 key: 'AIzaSyB_OIuPsnUNvJ-CN0z2dir7cVbqJ7Xj3_Q',
                 language: 'en', // language of the results
-                types: '(cities)', // default: 'geocode'
+                //types: '(regions)', // default: 'geocode',
+                
               }}
-
               styles={{
                 description: {
                   fontWeight: 'bold',
@@ -141,8 +141,11 @@ export default class Home extends React.Component {
                 predefinedPlacesDescription: {
                   color: '#1faadb',
                 },
+                
               }}
               enablePoweredByContainer={true}
+              currentLocation={true}
+              currentLocationLable='Current Location'
 
               nearbyPlacesAPI="GoogleReverseGeocoding"
 
@@ -154,12 +157,11 @@ export default class Home extends React.Component {
               filterReverseGeocodingByTypes={[
                 'locality',
                 'administrative_area_level_3',
+                'street_address'
               ]}
 
               debounce={200}
-              
             />
-            <View><ActionButton icon="place" onPress={this.getCurrentLocation} /></View>
 
             <Content>
               <ListItem>

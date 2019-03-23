@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, ScrollView, TextInput } from 'react-native';
-import DateTimePickerTest from '../Components/DateTimePickerTest';
 import { Button, ActionButton } from 'react-native-material-ui';
 
 

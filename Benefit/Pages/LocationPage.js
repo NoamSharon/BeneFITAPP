@@ -42,19 +42,12 @@ export default class LocationPage extends React.Component {
     console.warn('dvs' + this.props.couple_results);
     return (
       <View style={styles.container}>
-        <View style={styles.Header}>
-          <View style={{ margin: 10, justifyContent: 'flex-start' }}>
-          </View>
-        </View>
         <View style={styles.Content}>
-          <View style={{
-            borderColor: 'black',
-            borderWidth: 1,
-          }}>
+          <View >
             <MapView
               style={{
                 flex: 1,
-                width: Dimensions.get('window').width - 30,
+                width: Dimensions.get('window').width - 30
               }}
 
               region={{
@@ -79,8 +72,8 @@ export default class LocationPage extends React.Component {
                     latitude: data.Latitude,
                     longitude: data.Longitude
                   }}
-                title={data.FirstName}
-                description={''+data.Age}
+                  title={data.FirstName + ' ' + data.LastName + ', ' + data.Age.toString()}
+                  description={(Math.floor(data.Distance * 10) / 10).toString() + ' KM away from you'}
                 //image={require('../assets/icon.png')}
                 />
               )
@@ -91,8 +84,8 @@ export default class LocationPage extends React.Component {
                     latitude: data.Latitude,
                     longitude: data.Longitude
                   }}
-                title={data.FirstName}
-                description={''+data.Age}
+                  title={'Group'}
+                  description={'result'}
                 //image={require('../assets/icon.png')}
                 />
               )
