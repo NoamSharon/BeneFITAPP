@@ -25,7 +25,7 @@ class App extends React.Component {
     },
     
     {
-      initialRouteName: 'Home',
+      initialRouteName: 'Login',
     }
   );
 

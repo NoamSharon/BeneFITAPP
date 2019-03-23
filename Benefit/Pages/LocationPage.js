@@ -5,6 +5,8 @@ import { Button, ActionButton } from 'react-native-material-ui';
 import { MapView } from 'expo';
 const { Marker } = MapView;
 
+_Latitude = 0;
+_Longitude = 0;
 export default class LocationPage extends React.Component {
   static navigationOptions = {
     title: 'LOCATION',
@@ -12,34 +14,32 @@ export default class LocationPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: 32.360869,
-      longitude: 34.862154
+      Latitude: 0,
+      Longitude: 0
     }
+    this.show = this.show.bind(this);
   }
 
-  btnLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const output =
-          'latitude=' + position.coords.latitude +
-          '\nlongitude=' + position.coords.longitude +
-          '\naltitude=' + position.coords.altitude +
-          '\nheading=' + position.coords.heading +
-          '\nspeed=' + position.coords.speed
+  show() {
+    console.warn('show');
+    return this.props.couple_results.map((data) => {
+      return (
+        <Marker
+          coordinate={{
+            latitude: data.Latitude,
+            longitude: data.Longitude
+          }}
+        // title={result.FirstName}
+        // description={result.Age}
+        //image={require('../assets/icon.png')}
+        />
+      )
+    })
 
-        this.setState(
-          {
-            latitude: position.coords.latitude,// +  Math.random()/1000,
-            longitude: position.coords.longitude
-          });
-      },
-      (error) => alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-  };
-
+  }
 
   render() {
+    console.warn('dvs' + this.props.couple_results);
     return (
       <View style={styles.container}>
         <View style={styles.Header}>
@@ -58,38 +58,56 @@ export default class LocationPage extends React.Component {
               }}
 
               region={{
-                latitude: this.state.latitude,
-                longitude: this.state.longitude,
+                latitude: this.props.Latitude,
+                longitude: this.props.Longitude,
                 latitudeDelta: 0.01322,
                 longitudeDelta: 0.01321,
               }}
             >
               <Marker
                 coordinate={{
-                  latitude: this.state.latitude,
-                  longitude: this.state.longitude
+                  latitude: this.props.Latitude,
+                  longitude: this.props.Longitude
                 }}
                 title='my place:)'
                 description='here i am'
               //image={require('../assets/icon.png')}
               />
+              {this.props.couple_results.map(data => (
+                <Marker
+                  coordinate={{
+                    latitude: data.Latitude,
+                    longitude: data.Longitude
+                  }}
+                title={data.FirstName}
+                description={''+data.Age}
+                //image={require('../assets/icon.png')}
+                />
+              )
+              )}
+              {this.props.group_results.map(data => (
+                <Marker
+                  coordinate={{
+                    latitude: data.Latitude,
+                    longitude: data.Longitude
+                  }}
+                title={data.FirstName}
+                description={''+data.Age}
+                //image={require('../assets/icon.png')}
+                />
+              )
+              )}
 
-              
-          {/* ---------try to put results markers---------------- */}
-              {console.log("hi stav" +this.props.couple_results)}
-          {this.props.couple_results.map(result=>(
-             <Marker
-             coordinate={{
-               latitude: '32.197450',
-               longitude:  '34.825434'
-             }}
-             title={result.FirstName}
-             description={result.Age}
-           //image={require('../assets/icon.png')}
-           />
-          ))}  
+
+              {/* {this.props.couple_results && this.show()} */}
+
+
 
             </MapView>
+
+
+
+
           </View>
           <View
             style={{
@@ -98,10 +116,12 @@ export default class LocationPage extends React.Component {
               width: Dimensions.get('window').width - 10,
               flexDirection: 'row-reverse'
             }}>
-            <ActionButton icon="place" onPress={this.btnLocation} />
+
           </View>
         </View>
       </View>
     );
+
   }
+
 }
