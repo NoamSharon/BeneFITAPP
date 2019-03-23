@@ -3,14 +3,17 @@ import { StyleSheet, View, ScrollView, TextInput, Dimensions, Image } from 'reac
 import { Button, ActionButton } from 'react-native-material-ui';
 import { MapView } from 'expo';
 import LocationPage from './LocationPage';
-import styles from './pageStyle';
+import HomeStyle from '../Styles/HomeStyle';
 import { Container, Header, Content, ListItem, CheckBox, Text, Body } from 'native-base';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Time from './Time';
+import moment from 'moment';
 
-var _Latitude = 0;
-var _Longitude = 0;
-const { Marker } = MapView;
 var Code = 0;
+var hours = new Date().getHours();
+var minutes = new Date().getMinutes();
+
+if (minutes < 10) { minutes = '0' + minutes; }
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -20,8 +23,8 @@ export default class Home extends React.Component {
       {
         Toggle: '',
         UserCode: 0,
-        StartTime: '2019-03-16 08:00:00.123',
-        EndTime: '2019-03-16 12:00:00.123',
+        StartTime:(moment(new Date()).format('YYYY-MM-DD HH:mm:ss')),
+        EndTime: (moment(new Date()).format('YYYY-MM-DD HH:mm:ss')),
         Latitude: 0,
         Longitude: 0,
         WithTrainer: false,
@@ -46,9 +49,10 @@ export default class Home extends React.Component {
   }
 
   search() {
+    if(this.state.StartTime<this.state.EndTime){
     const OnlineDetails = {
       //UserCode: Code,
-      UserCode:1,
+      UserCode: 1,
       Latitude: this.state.Latitude,
       Longitude: this.state.Longitude,
       StartTime: this.state.StartTime,
@@ -58,7 +62,8 @@ export default class Home extends React.Component {
       GroupWithTrainer: this.boolToInt(this.state.GroupWithTrainer),
       GroupWithPartners: this.boolToInt(this.state.GroupWithPartners),
     }
-
+  
+console.warn(OnlineDetails)
     fetch('http://proj.ruppin.ac.il/bgroup79/test1/tar6/api/InsertOnlineTrainee', {
 
       method: 'POST',
@@ -67,7 +72,7 @@ export default class Home extends React.Component {
     })
       .then(res => res.json())
       .then(response => {
-        this.setState({couple_results:response});
+        this.setState({ couple_results: response });
       })
 
       .catch(error => console.warn('Error:', error.message));
@@ -81,12 +86,15 @@ export default class Home extends React.Component {
       })
         .then(res => res.json())
         .then(response => {
-          this.setState({group_results:response});
+          this.setState({ group_results: response });
         })
 
         .catch(error => console.warn('Error:', error.message));
     }
+    
   }
+  else {alert('change the time')};
+}
 
   getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition(
@@ -98,7 +106,7 @@ export default class Home extends React.Component {
           '\nheading=' + position.coords.heading +
           '\nspeed=' + position.coords.speed;
 
-        this.setState({Latitude:position.coords.latitude, Longitude: position.coords.longitude, Status:1}) ;// +  Math.random()/1000,
+        this.setState({ Latitude: position.coords.latitude, Longitude: position.coords.longitude, Status: 1 });// +  Math.random()/1000,
 
       },
       (error) => alert(error.message),
@@ -107,12 +115,44 @@ export default class Home extends React.Component {
     );
   };
 
+  setStartTime=(_startHour, _startMinute)=> {
+    let hours_now = new Date().getHours();
+    let minutes_now = new Date().getMinutes();
+    let day = new Date();
+    if (hours_now >= _startHour && minutes_now>_startMinute) {
+      day = moment(day).add(1, 'day').format('YYYY-MM-DD');
+    }
+    else {
+      day = moment(day).add(0, 'day').format('YYYY-MM-DD');
+    }
+    this.setState({ StartTime: (day + ' ' + _startHour + ':' + _startMinute + ':00.000').toString() });
+    
+  }
+
+  setEndTime=(_endHour, _endMinute)=> {
+    let hours_now = new Date().getHours();
+    let minutes_now = new Date().getMinutes();
+    let day = new Date();
+
+    if (hours_now > _endHour ) {
+      day = moment(day).add(1, 'day').format('YYYY-MM-DD');
+      console.warn('tomorrow ' + day);
+    }
+    else {
+      day = moment(day).add(0, 'day').format('YYYY-MM-DD');
+      console.warn('today ' + day);
+    }
+    this.setState({ EndTime: (day + ' ' + _endHour + ':' + _endMinute + ':00.000').toString() });
+    console.log('end time: ' + this.state.EndTime);
+  }
+
 
   render() {
+   
     if (this.state.Status == 1) {
       return (
         <ScrollView>
-          <Container>
+          <Container >
             <GooglePlacesAutocomplete
               placeholder="Search"
               minLength={2} // minimum length of text to search
@@ -122,7 +162,7 @@ export default class Home extends React.Component {
               fetchDetails={true}
               renderDescription={row => row.description || row.formatted_address || row.name}
               onPress={(data, details = null) => {
-                this.setState({Latitude:details.geometry.location.lat , Longitude:details.geometry.location.lng });
+                this.setState({ Latitude: details.geometry.location.lat, Longitude: details.geometry.location.lng });
               }}
               getDefaultValue={() => {
                 return ''; // text input default value
@@ -132,7 +172,7 @@ export default class Home extends React.Component {
                 key: 'AIzaSyB_OIuPsnUNvJ-CN0z2dir7cVbqJ7Xj3_Q',
                 language: 'en', // language of the results
                 //types: '(regions)', // default: 'geocode',
-                
+
               }}
               styles={{
                 description: {
@@ -141,7 +181,7 @@ export default class Home extends React.Component {
                 predefinedPlacesDescription: {
                   color: '#1faadb',
                 },
-                
+
               }}
               enablePoweredByContainer={true}
               currentLocation={true}
@@ -162,6 +202,12 @@ export default class Home extends React.Component {
 
               debounce={200}
             />
+            <View style={HomeStyle.TimePickerContainer}>
+              <Text>From:</Text>
+              <Time setTime={this.setStartTime} Time={hours + ':' + minutes} style={HomeStyle.TimePicker}></Time>
+              <Text>To:</Text>
+              <Time setTime={this.setEndTime} Time={hours + ':' + minutes} style={HomeStyle.TimePicker}></Time>
+            </View>
 
             <Content>
               <ListItem>
@@ -212,14 +258,5 @@ export default class Home extends React.Component {
     }
     else return (<Text>hi</Text>);
   }
-  
-}
 
-const styles1 = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+}

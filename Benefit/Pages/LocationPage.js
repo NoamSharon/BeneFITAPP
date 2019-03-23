@@ -39,7 +39,6 @@ export default class LocationPage extends React.Component {
   }
 
   render() {
-    console.warn('dvs' + this.props.couple_results);
     return (
       <View style={styles.container}>
         <View style={styles.Content}>
@@ -66,7 +65,7 @@ export default class LocationPage extends React.Component {
                 description='here i am'
               //image={require('../assets/icon.png')}
               />
-              {this.props.couple_results.map(data => (
+              {this.props.couple_results == null ? alert('no results') : this.props.couple_results.map(data => (
                 <Marker
                   coordinate={{
                     latitude: data.Latitude,
@@ -78,7 +77,7 @@ export default class LocationPage extends React.Component {
                 />
               )
               )}
-              {this.props.group_results.map(data => (
+              {this.props.group_results == null ?alert('no results') : this.props.group_results.map(data => (
                 <Marker
                   coordinate={{
                     latitude: data.Latitude,
