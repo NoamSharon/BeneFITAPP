@@ -8,6 +8,7 @@ import { Container, Header, Content, ListItem, CheckBox, Text, Body } from 'nati
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Time from './Time';
 import moment from 'moment';
+import ImagePickerExample from './ImagePickerExample';
 
 var Code = 0;
 var hours = new Date().getHours();
@@ -119,6 +120,7 @@ console.warn(OnlineDetails)
     let hours_now = new Date().getHours();
     let minutes_now = new Date().getMinutes();
     let day = new Date();
+    
     if (hours_now >= _startHour && minutes_now>_startMinute) {
       day = moment(day).add(1, 'day').format('YYYY-MM-DD');
     }
@@ -153,6 +155,7 @@ console.warn(OnlineDetails)
       return (
         <ScrollView>
           <Container >
+          <ImagePickerExample></ImagePickerExample>
             <GooglePlacesAutocomplete
               placeholder="Search"
               minLength={2} // minimum length of text to search
